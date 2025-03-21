@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS Sekolah Semolowaru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+</head>
+<body class="bg-gray-100">
+        <!-- Navbar -->
+        <nav class="bg-white-900 text-white py-4">
+            <div class="container mx-auto flex justify-between items-center px-6">
+                <div class="flex items-center space-x-4">
+                    <img src="/images/Lambang-UM.png" alt="Logo UM" class="h-12">
+                    <h1 class="text-2xl text-red-900 font-bold">Klakah School</h1>
+                </div>
+                <ul class="hidden md:flex space-x-6">
+                    <li><a href="index.html" class="text-red-900 hover:text-yellow-400 font-bold">Beranda</a></li>
+                    <li><a href="peta.html" class="text-red-900 hover:text-yellow-400 font-bold">Peta Webgis</a></li>
+                    <li><a href="#" class="text-red-900 hover:text-yellow-400 font-bold">Tentang Kami</a></li>
+                </ul>
+                <button class="md:hidden text-yellow-400 text-2xl">☰</button>
+            </div>
+        </nav>
+
+    <div class="flex flex-wrap p-4">
+        <!-- Sidebar Legenda -->
+        <div class="w-1/4 bg-white shadow-lg rounded-lg p-4 overflow-y-auto max-h-[600px]">
+            <h2 class="text-white text-2xl font-bold bg-blue-900 p-4 rounded-md text-center">Legenda</h2>
+            <div class="mt-4">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full text-left mb-2">SD</button>
+            </div>
+        </div>
+        
+        <!-- Peta -->
+        <div class="w-3/4 p-4">
+            <div id="map" class="w-full h-[600px] rounded-lg shadow-lg"></div>
+        </div>
+    </div>
+
+     <!-- Footer -->
+     <footer class="bg-red-900 text-white text-center py-6">
+        <div class="flex justify-center space-x-6 text-2xl">
+            <a href="#" class="text-blue-400 hover:text-yellow-400">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="text-blue-300 hover:text-yellow-400">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-purple-500 hover:text-yellow-400">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-red-500 hover:text-yellow-400">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="mt-4 text-sm">Copyright © 2025 Sekolah Semolowaru | Powered by Kelompok 7</p>
+    </footer>
+
+    <!-- Tambahkan FontAwesome untuk ikon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+
+    <script>
+        var map = L.map('map').setView([-8.000, 113.250], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var customIcon = L.icon({
+            iconUrl: "https://dimasdwic406.github.io/Kelompok7Kemker/markers/SD_5.svg",
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
+
+        var schools = [
+        { name: "SD Negeri Klakah 04", coords: [-7.9758059, 113.2487685] },
+            { name: "SD Negeri Mlawang 03", coords: [-7.9995906, 113.2432381] },
+            { name: "SD Negeri Kudus 01", coords: [-8.0252428, 113.2666894] },
+            { name: "SD NEGERI SRUNI 02", coords: [-8.0029894, 113.2317497] },
+            { name: "SD NEGERI TEGALRANDU 01", coords: [-7.9932273, 113.255614] },
+            { name: "SD NEGERI KLAKAH 01", coords: [-7.995127, 113.2497844] },
+            { name: "SD NEGERI TEGALCIUT 02", coords: [-7.9708533, 113.2258017] },
+            { name: "SD NEGERI TEGALRANDU 02", coords: [-7.984855, 113.2656465] },
+            { name: "SD NEGERI KLAKAH 03", coords: [-8.0156172, 113.2399631] },
+            { name: "SD NEGERI MLAWANG 02", coords: [-8.0103526, 113.2221768] },
+            { name: "SD NEGERI KLAKAH 02", coords: [-7.999680683608583, 113.2551364495884] },
+            { name: "SD NEGERI MLAWANG 01", coords: [-7.9954626, 113.2417422] },
+            { name: "SD NEGERI RANUPAKIS 02", coords: [-8.001479528749996, 113.26775282445882] },
+            { name: "SD ISLAM TERPADU NURUL ISLAM KLAKAH", coords: [-7.9935712, 113.250273] },
+            { name: "SD NEGERI SAWARAN LOR 04", coords: [-7.9935691, 113.2115568] },
+            { name: "SD NEGERI KEBONAN 1", coords: [-8.0229772, 113.2471165] },
+            { name: "SD NEGERI SUMBERWRINGIN 01", coords: [-8.0387593, 113.2334655] },
+            { name: "SD NEGERI TEGALCIUT 01", coords: [-7.978755, 113.2327312] },
+            { name: "SD NEGERI PAPRINGAN 02", coords: [-7.993064834395547, 113.28733944309752] },
+            { name: "SD NEGERI DUREN 01", coords: [-8.0138558, 113.2637176] },
+            { name: "SD NEGERI KEBONAN 2", coords: [-8.0380763, 113.2549721] },
+            { name: "SD NEGERI SRUNI 01", coords: [-7.9934993, 113.2336266] },
+            { name: "SD NEGERI SAWARAN LOR 02", coords: [-7.974599190406786, 113.20858186678606] },
+            { name: "SD NEGERI SAWARAN LOR 01", coords: [-7.989109549733776, 113.225797620752] },
+            { name: "SD NEGERI SUMBERWRINGIN 02", coords: [-8.005398257855997, 113.2957648263121] },
+            { name: "SD NEGERI PAPRINGAN 01", coords: [-7.9920875, 113.2411334] },
+            { name: "SD NEGERI SUMBERWRINGIN 03", coords: [-8.013777814542252, 113.30408613795043] },
+            { name: "SD NEGERI DUREN 02", coords: [-8.026721, 113.2855499] }
+        ];
+
+        schools.forEach(school => {
+            L.marker(school.coords, { icon: customIcon })
+                .addTo(map)
+                .bindPopup(`<b>${school.name}</b>`);
+        });
+
+        // Cari batas minimum dan maksimum koordinat
+        var latitudes = schools.map(s => s.coords[0]);
+        var longitudes = schools.map(s => s.coords[1]);
+        var minLat = Math.min(...latitudes), maxLat = Math.max(...latitudes);
+        var minLng = Math.min(...longitudes), maxLng = Math.max(...longitudes);
+
+        // Buat polygon boundary
+        var boundary = [
+            [minLat, minLng], [minLat, maxLng],
+            [maxLat, maxLng], [maxLat, minLng], [minLat, minLng]
+        ];
+
+        // Tambahkan polygon ke peta
+        L.polygon(boundary, {color: 'red'}).addTo(map);
+
+    </script>
+</body>
+</html>
